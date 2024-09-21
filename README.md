@@ -1,4 +1,4 @@
-# HLL Server Status Bot
+# HLL Gamestatus + Maprotation
 
 The HLL Server Status Bot is a Discord bot designed to provide real-time updates on Hell Let Loose game server status. It fetches and displays information about current and upcoming maps, player counts, game scores, and more for multiple servers.
 
