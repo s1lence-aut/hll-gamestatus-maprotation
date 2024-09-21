@@ -1,0 +1,6 @@
+services:
+  hll_top20kills_bot:
+    build: .
+    env_file: .env
+    restart: unless-stopped
+    command: node main.mjs
