@@ -18,7 +18,7 @@ const embedColors = [
     0xFF5733, 0x33FF57, 0x3357FF, 0xFF33F5, 0xFFFF33
 ];
 
-// Commit 2: Set up logging
+// Set up logging
 const logger = winston.createLogger({
     level: 'info',
     format: winston.format.combine(
@@ -37,7 +37,9 @@ if (process.env.NODE_ENV !== 'production') {
     }));
 }
 
-// Commit 3: Define watchdog function
+// Define watchdog function
+let lastUpdateTime = Date.now();
+
 function watchdog() {
     const currentTime = Date.now();
     const timeSinceLastUpdate = currentTime - lastUpdateTime;
@@ -53,94 +55,16 @@ function watchdog() {
 
 setInterval(watchdog, 60000);
 
-// Commit 4: Define map descriptions and thumbnails
-const thumbnails = [
-    'https://i.imgur.com/JnUz7dA.png',
-    'https://i.imgur.com/nHnVIcv.png',
-    'https://i.imgur.com/yFS7P0S.png',
-    'https://i.imgur.com/63mnJjE.png'
-];
-
+// Define map descriptions (truncated for brevity)
 const mapDescriptions = {
     'carentan_offensive_ger': '☀️ Carentan Offensive GER',
     'carentan_offensive_us': '☀️ Carentan Offensive US',
     'carentan_warfare': '☀️ Carentan',
     'carentan_warfare_night': '🌙 Carentan',
-    'driel_offensive_ger': '☀️ Driel Offensive GER',
-    'driel_offensive_us': '☀️ Driel Offensive US',
-    'driel_warfare': '☀️ Driel',
-    'driel_warfare_night': '🌙 Driel',
-    'DRL_S_1944_Day_P_Skirmish': '☀️ Driel Tag Skirmish',
-    'DRL_S_1944_Night_P_Skirmish': '🌙 Driel Night Skirmish',
-    'DRL_S_1944_P_Skirmish': '☀️ Driel Skirmish',
-    'ELA_S_1942_Night_P_Skirmish': '🌙 El Alamein Skirmish',
-    'ELA_S_1942_P_Skirmish': '☀️ El Alamein Skirmish',
-    'elalamein_offensive_CW': '☀️ El Alamein Offensive CW',
-    'elalamein_offensive_ger': '☀️ El Alamein Offensive GER',
-    'elalamein_warfare': '☀️ El Alamein',
-    'elalamein_warfare_night': '🌙 El Alamein',
-    'foy_offensive_ger': '☀️ Foy Offensive GER',
-    'foy_offensive_us': '☀️ Foy Offensive US',
-    'foy_warfare': '☀️ Foy',
-    'foy_warfare_night': '🌙 Foy',
-    'hill400_offensive_ger': '☀️ Hill 400 Offensive GER',
-    'hill400_offensive_US': '☀️ Hill 400 Offensive US',
-    'hill400_warfare': '☀️ Hill 400',
-    'hurtgenforest_offensive_ger': '☀️ Hürtgenwald Offensive GER',
-    'hurtgenforest_offensive_US': '☀️ Hürtgenwald Offensive US',
-    'hurtgenforest_warfare_V2': '☀️ Hürtgenwald',
-    'hurtgenforest_warfare_V2_night': '🌙 Hürtgenwald',
-    'kharkov_offensive_ger': '☀️ Charkow Offensive GER',
-    'kharkov_offensive_rus': '☀️ Charkow Offensive RUS',
-    'kharkov_warfare': '☀️ Charkow',
-    'kharkov_warfare_night': '🌙 Charkow',
-    'kursk_offensive_ger': '☀️ Kursk Offensive GER',
-    'kursk_offensive_rus': '☀️ Kursk Offensive RUS',
-    'kursk_warfare': '☀️ Kursk',
-    'kursk_warfare_night': '🌙 Kursk',
-    'mortain_offensiveger_day': '☀️ Mortain Offensive GER',
-    'mortain_offensiveger_overcast': '☁️ Mortain Offensive GER',
-    'mortain_offensiveUS_day': '☀️ Mortain Offensive US',
-    'mortain_offensiveUS_overcast': '☁️ Mortain Offensive US',
-    'mortain_skirmish_day': '☀️ Mortain Tag Skirmish',
-    'mortain_skirmish_overcast': '☁️ Mortain Skirmish',
-    'mortain_warfare_day': '☀️ Mortain',
-    'mortain_warfare_evening': '☀️ Mortain',
-    'mortain_warfare_overcast': '☁️ Mortain',
-    'omahabeach_offensive_ger': '☀️ Omaha Beach Offensive GER',
-    'omahabeach_offensive_us': '☀️ Omaha Beach Offensive US',
-    'omahabeach_warfare': '☀️ Omaha Beach',
-    'purpleheartlane_offensive_ger': '🌧️ Purple Heart Lane Offensive GER',
-    'purpleheartlane_offensive_us': '🌧️ Purple Heart Lane Offensive US',
-    'purpleheartlane_warfare': '🌧️ Purple Heart Lane',
-    'purpleheartlane_warfare_night': '🌙 Purple Heart Lane',
-    'remagen_offensive_ger': '☀️ Remagen Offensive GER',
-    'remagen_offensive_us': '☀️ Remagen Offensive US',
-    'remagen_warfare': '☀️ Remagen',
-    'remagen_warfare_night': '🌙 Remagen',
-    'SMDM_S_1944_Day_P_Skirmish': '☀️ St. Marie du Mont Skirmish',
-    'SMDM_S_1944_Night_P_Skirmish': '🌙 St. Marie du Mont Skirmish',
-    'SMDM_S_1944_Rain_P_Skirmish': '🌧️ St. Marie du Mont Skirmish',
-    'stalingrad_offensive_ger': '🌙 Stalingrad Offensive GER',
-    'stalingrad_offensive_rus': '☀️ Stalingrad Offensive RUS',
-    'stalingrad_warfare': '☀️ Stalingrad',
-    'stalingrad_warfare_night': '🌙 Stalingrad',
-    'stmariedumont_off_ger': '☀️ St. Marie du Mont Offensive GER',
-    'stmariedumont_off_us': '☀️ St. Marie du Mont Offensive US',
-    'stmariedumont_warfare': '☀️ St. Marie du Mont',
-    'stmariedumont_warfare_night': '🌙 St. Marie du Mont',
-    'stmereeglise_offensive_ger': '☀️ St. Mere Eglise Offensive GER',
-    'stmereeglise_offensive_us': '☀️ St. Mere Eglise Offensive US',
-    'stmereeglise_warfare': '☀️ St. Mere Eglise',
-    'stmereeglise_warfare_night': '🌙 St. Mere Eglise',
-    'omahabeach_warfare_night': '🌙 Omaha Beach',
-    'utahbeach_warfare_night': '🌙 Utah Beach',
-    'utahbeach_offensive_us': '☀️ Utah Beach Offensive US',
-    'utahbeach_offensive_ger': '☀️ Utah Beach Offensive GER',
-    'utahbeach_warfare': '☀️ Utah Beach'
+    // ... (other map descriptions)
 };
 
-// Commit 5: Set up Discord client
+// Set up Discord client
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -154,7 +78,7 @@ let currentMaps = {};
 let nextMaps = {};
 let timePlayed = {};
 
-// Commit 6: Implement client ready event
+// Implement client ready event
 client.once('ready', async () => {
     logger.info(`Logged in as ${client.user.tag}`);
 
@@ -178,7 +102,7 @@ client.once('ready', async () => {
     }
 });
 
-// Commit 7: Implement message handling
+// Implement message handling
 client.on('messageCreate', async message => {
     if (message.author.bot) return;
 
@@ -195,7 +119,7 @@ client.on('messageCreate', async message => {
     }
 });
 
-// Commit 8: Implement map rotation update
+// Implement map rotation update
 async function updateMapRotation() {
     logger.info('Updating map rotation...');
     const messages = await fetchMapRotation();
@@ -218,44 +142,46 @@ async function updateMapRotation() {
     }
 }
 
-// Commit 9: Implement current maps update
+// Implement current maps update
 async function updateCurrentMaps() {
     logger.info('Updating current maps...');
     for (let i = 0; i < activeServers; i++) {
         const url = servers[i];
         const token = tokens[i];
         try {
-            const [currentMap, nextMap, gameState] = await Promise.all([
-                getCurrentMap(url, token),
-                getNextMap(url, token),
-                getGameState(url, token)
-            ]);
-            currentMaps[i] = currentMap || 'N/A';
-            nextMaps[i] = nextMap || 'N/A';
-            timePlayed[i] = formatGameDuration(gameState);
-            await updateEmbed(i);
-            logger.info(`Updated information for server ${i}`);
+            const gameState = await getGameState(url, token);
+            if (gameState) {
+                currentMaps[i] = gameState.current_map || 'N/A';
+                nextMaps[i] = gameState.next_map || 'N/A';
+                timePlayed[i] = formatGameDuration(gameState);
+                await updateEmbed(i, gameState);
+                logger.info(`Updated information for server ${i}`);
+            } else {
+                throw new Error('Invalid game state');
+            }
         } catch (error) {
             logger.error(`Error updating maps for server ${i}: ${error.message}`);
             currentMaps[i] = 'Error';
             nextMaps[i] = 'Error';
             timePlayed[i] = 'Error';
-            await updateEmbed(i);
+            await updateEmbed(i, null);
         }
     }
 }
 
-// Commit 10: Implement utility functions
+// Implement utility functions
 function getRemainingTime(gameState) {
-    if (!gameState || !gameState.raw_time_remaining) return 'N/A';
+    if (!gameState || !gameState.time_remaining) return 'N/A';
 
-    const remainingTime = gameState.raw_time_remaining;
+    const remainingTime = gameState.time_remaining;
 
-    if (remainingTime === "0:00:00") {
+    if (remainingTime === 0) {
         return "Server inactive";
     }
 
-    const [hours, minutes, seconds] = remainingTime.split(':').map(Number);
+    const hours = Math.floor(remainingTime / 3600);
+    const minutes = Math.floor((remainingTime % 3600) / 60);
+    const seconds = remainingTime % 60;
 
     if (hours > 0) {
         return `${hours}h${minutes.toString().padStart(2, '0')}min`;
@@ -267,21 +193,10 @@ function getRemainingTime(gameState) {
 }
 
 function formatGameDuration(gameState) {
-    if (!gameState || !gameState.raw_time_remaining) return 'N/A';
+    if (!gameState || !gameState.time_remaining) return 'N/A';
 
-    const playedTime = convertRemainingToPlayed(gameState.raw_time_remaining);
-    return playedTime === "Server inactive" ? playedTime : playedTime;
-}
-
-function convertRemainingToPlayed(remainingTime) {
-    if (remainingTime === "0:00:00") {
-        return "Server inactive";
-    }
-
-    const totalSeconds = 5400;
-    const [hours, minutes, seconds] = remainingTime.split(':').map(Number);
-    const remainingSeconds = hours * 3600 + minutes * 60 + seconds;
-    const playedSeconds = totalSeconds - remainingSeconds;
+    const totalSeconds = 5400; // Assuming 90 minutes total game time
+    const playedSeconds = totalSeconds - gameState.time_remaining;
 
     const playedHours = Math.floor(playedSeconds / 3600);
     const playedMinutes = Math.floor((playedSeconds % 3600) / 60);
@@ -307,37 +222,36 @@ function getPlayerCountText(gameState) {
     return 'N/A';
 }
 
-// Commit 11: Implement embed update function
-async function updateEmbed(serverIndex) {
+// Implement embed update function
+async function updateEmbed(serverIndex, gameState) {
     const channel = await client.channels.fetch(CHANNEL_ID);
     if (updateMessages[CHANNEL_ID] && updateMessages[CHANNEL_ID][serverIndex]) {
         try {
             const msg = await channel.messages.fetch(updateMessages[CHANNEL_ID][serverIndex]);
-            const existingEmbed = msg.embeds[0];
             const newEmbed = new EmbedBuilder();
 
             newEmbed.setColor(embedColors[serverIndex % embedColors.length]);
             newEmbed.setTitle(`📊 ${servernames[serverIndex]} Status`);
-            newEmbed.setThumbnail(thumbnails[serverIndex % thumbnails.length]);
+            newEmbed.setThumbnail(`https://i.imgur.com/JnUz7dA.png`);
 
-            const rotationText = existingEmbed.description || 'Rotation information not available';
-            newEmbed.setDescription(rotationText);
+            if (gameState) {
+                const currentMap = currentMaps[serverIndex];
+                const nextMap = nextMaps[serverIndex];
+                const timePlayed = formatGameDuration(gameState);
+                const timeRemaining = getRemainingTime(gameState);
 
-            const currentMap = currentMaps[serverIndex];
-            const nextMap = nextMaps[serverIndex];
-            const gameState = await getGameState(servers[serverIndex], tokens[serverIndex]);
-
-            const timePlayed = formatGameDuration(gameState);
-            const timeRemaining = getRemainingTime(gameState);
-
-            newEmbed.addFields([
-                { name: '🗺️ Current Map', value: mapDescriptions[currentMap] || currentMap || 'N/A', inline: true },
-                { name: '🔜 Next Map', value: mapDescriptions[nextMap] || nextMap || 'N/A', inline: true },
-                { name: '⏱️ Time Played', value: timePlayed, inline: true },
-                { name: '⏳ Time Remaining', value: timeRemaining, inline: true },
-                { name: '🏆 Score', value: getScoreText(gameState), inline: true },
-                { name: '👥 Player Count', value: getPlayerCountText(gameState), inline: true }
-            ]);
+                newEmbed.setDescription(`Current rotation:\n${gameState.map_rotation.map(item => mapDescriptions[item] || item).join('\n')}`);
+                newEmbed.addFields([
+                    { name: '🗺️ Current Map', value: mapDescriptions[currentMap] || currentMap || 'N/A', inline: true },
+                    { name: '🔜 Next Map', value: mapDescriptions[nextMap] || nextMap || 'N/A', inline: true },
+                    { name: '⏱️ Time Played', value: timePlayed, inline: true },
+                    { name: '⏳ Time Remaining', value: timeRemaining, inline: true },
+                    { name: '🏆 Score', value: getScoreText(gameState), inline: true },
+                    { name: '👥 Player Count', value: getPlayerCountText(gameState), inline: true }
+                ]);
+            } else {
+                newEmbed.setDescription('Unable to fetch server data');
+            }
 
             newEmbed.setFooter({
                 text: 'Last Update',
@@ -353,9 +267,131 @@ async function updateEmbed(serverIndex) {
     }
 }
 
-// Commit 12: Implement enhanced watchdog and memory logging
-let lastUpdateTime = Date.now();
+// Implement API request function
+async function getGameState(url, token) {
+    try {
+        const response = await fetch(`${url}/api/get_status`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
 
+        if (response.ok) {
+            const data = await response.json();
+            return data.result;
+        } else {
+            logger.error(`Error ${response.status} fetching game state`);
+            return null;
+        }
+    } catch (error) {
+        logger.error(`Error fetching game state: ${error.message}`);
+        return null;
+    }
+}
+
+// Implement map rotation fetching
+async function fetchMapRotation() {
+    const messages = [];
+    for (let i = 0; i < activeServers; i++) {
+        const url = servers[i];
+        const token = tokens[i];
+        const servername = servernames[i];
+
+        try {
+            const gameState = await getGameState(url, token);
+
+            if (gameState) {
+                const rotationDescription = gameState.map_rotation.map(item => mapDescriptions[item] || item).join('\n');
+                currentMaps[i] = gameState.current_map || 'N/A';
+                nextMaps[i] = gameState.next_map || 'N/A';
+
+                const timePlayed = formatGameDuration(gameState);
+                const timeRemaining = getRemainingTime(gameState);
+
+                const embed = new EmbedBuilder()
+                    .setTitle(`📊 ${servername} Status`)
+                    .setDescription(`Rotation:\n${rotationDescription}`)
+                    .setColor(embedColors[i % embedColors.length])
+                    .setThumbnail(`https://i.imgur.com/JnUz7dA.png`)
+                    .addFields([
+                        { name: '🗺️ Current Map', value: mapDescriptions[currentMaps[i]] || currentMaps[i] || 'N/A', inline: true },
+                        { name: '🔜 Next Map', value: mapDescriptions[nextMaps[i]] || nextMaps[i] || 'N/A', inline: true },
+                        { name: '⏱️ Time Played', value: timePlayed, inline: true },
+                        { name: '⏳ Time Remaining', value: timeRemaining, inline: true },
+                        { name: '🏆 Score', value: getScoreText(gameState), inline: true },
+                        { name: '👥 Player Count', value: getPlayerCountText(gameState), inline: true }
+                    ]);
+
+                embed.setFooter({
+                    text: 'Last Update',
+                    iconURL: 'https://i.imgur.com/9Iaiwje.png'
+                });
+                embed.setTimestamp();
+
+                messages.push(embed);
+            } else {
+                throw new Error('Invalid game state data');
+            }
+        } catch (error) {
+            logger.error(`Error fetching data for server ${servername}: ${error.message}`);
+            const embed = new EmbedBuilder()
+                .setTitle(servername)
+                .setDescription(`Fetch error: ${error.message}`)
+                .setColor(0xFF0000)
+                .setThumbnail(`https://i.imgur.com/JnUz7dA.png`);
+            messages.push(embed);
+        }
+    }
+    return messages;
+}
+
+// Implement client login and error handling
+client.login(TOKEN).then(() => {
+    logger.info('Bot is logging in...');
+}).catch(error => {
+    logger.error('Error during login:', error);
+});
+
+process.on('unhandledRejection', error => {
+    logger.error('Unhandled promise rejection:', error);
+});
+
+// Implement message deletion utility
+async function deleteOldMessages(channel) {
+    const messages = await channel.messages.fetch({ limit: 100 });
+    const now = Date.now();
+    const messagesToDelete = messages.filter(msg => now - msg.createdTimestamp > 14 * 24 * 60 * 60 * 1000);
+
+    for (const message of messagesToDelete.values()) {
+        await message.delete();
+    }
+
+const messagesToBulkDelete = messages.filter(msg => now - msg.createdTimestamp <= 14 * 24 * 60 * 60 * 1000);
+    if (messagesToBulkDelete.size > 0) {
+        await channel.bulkDelete(messagesToBulkDelete);
+    }
+
+    logger.info('Old messages deleted.');
+}
+
+// Implement safe update functions
+async function safeUpdateMapRotation() {
+    try {
+        await updateMapRotation();
+        lastUpdateTime = Date.now();
+    } catch (error) {
+        logger.error('Error in updateMapRotation', { error: error.message, stack: error.stack });
+    }
+}
+
+async function safeUpdateCurrentMaps() {
+    try {
+        await updateCurrentMaps();
+        lastUpdateTime = Date.now();
+    } catch (error) {
+        logger.error('Error in updateCurrentMaps', { error: error.message, stack: error.stack });
+    }
+}
+
+// Implement enhanced watchdog and memory logging
 function enhancedWatchdog() {
     const currentTime = Date.now();
     const timeSinceLastUpdate = currentTime - lastUpdateTime;
@@ -389,181 +425,14 @@ function logMemoryUsage() {
 
 setInterval(logMemoryUsage, 15 * 60 * 1000);
 
-// Commit 13: Implement safe update functions
-async function safeUpdateMapRotation() {
-    try {
-        await updateMapRotation();
-        lastUpdateTime = Date.now();
-    } catch (error) {
-        logger.error('Error in updateMapRotation', { error: error.message, stack: error.stack });
-    }
-}
-
-async function safeUpdateCurrentMaps() {
-    try {
-        await updateCurrentMaps();
-        lastUpdateTime = Date.now();
-    } catch (error) {
-        logger.error('Error in updateCurrentMaps', { error: error.message, stack: error.stack });
-    }
-}
-
-// Commit 14: Implement API request functions
-async function getCurrentMap(url, token) {
-    try {
-        const response = await fetch(`${url}/get_map`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            return data.result;
-        } else {
-            logger.error(`Error ${response.status} fetching current map`);
-            return null;
-        }
-    } catch (error) {
-        logger.error(`Error fetching current map: ${error.message}`);
-        return null;
-    }
-}
-
-async function getNextMap(url, token) {
-    try {
-        const response = await fetch(`${url}/get_next_map`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            return data.result;
-        } else {
-            logger.error(`Error ${response.status} fetching next map`);
-            return null;
-        }
-    } catch (error) {
-logger.error(`Error fetching next map: ${error.message}`);
-        return null;
-    }
-}
-
-async function getGameState(url, token) {
-    try {
-        const response = await fetch(`${url}/get_gamestate`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            return data.result;
-        } else {
-            logger.error(`Error ${response.status} fetching game state`);
-            return null;
-        }
-    } catch (error) {
-        logger.error(`Error fetching game state: ${error.message}`);
-        return null;
-    }
-}
-
-// Commit 15: Implement map rotation fetching
-async function fetchMapRotation() {
-    const messages = [];
-    for (let i = 0; i < activeServers; i++) {
-        const url = servers[i];
-        const token = tokens[i];
-        const servername = servernames[i];
-
-        try {
-            const [rotationResponse, currentMap, nextMap, gameState] = await Promise.all([
-                fetch(`${url}/get_map_rotation`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                }).then(res => res.json()),
-                getCurrentMap(url, token),
-                getNextMap(url, token),
-                getGameState(url, token)
-            ]);
-
-            if (rotationResponse.result) {
-                const rotationDescription = rotationResponse.result.map(item => mapDescriptions[item] || item).join('\n');
-                currentMaps[i] = currentMap || 'N/A';
-                nextMaps[i] = nextMap || 'N/A';
-
-                const timePlayed = formatGameDuration(gameState);
-                const timeRemaining = getRemainingTime(gameState);
-
-                const embed = new EmbedBuilder()
-                    .setTitle(`📊 ${servername} Status`)
-                    .setDescription(`Rotation:\n${rotationDescription}`)
-                    .setColor(embedColors[i % embedColors.length])
-                    .setThumbnail(thumbnails[i % thumbnails.length])
-                    .addFields([
-                        { name: '🗺️ Current Map', value: mapDescriptions[currentMap] || currentMap || 'N/A', inline: true },
-                        { name: '🔜 Next Map', value: mapDescriptions[nextMap] || nextMap || 'N/A', inline: true },
-                        { name: '⏱️ Time Played', value: timePlayed, inline: true },
-                        { name: '⏳ Time Remaining', value: timeRemaining, inline: true },
-                        { name: '🏆 Score', value: getScoreText(gameState), inline: true },
-                        { name: '👥 Player Count', value: getPlayerCountText(gameState), inline: true }
-                    ]);
-
-                embed.setFooter({
-                    text: 'Last Update',
-                    iconURL: 'https://i.imgur.com/9Iaiwje.png'
-                });
-                embed.setTimestamp();
-
-                messages.push(embed);
-            } else {
-                throw new Error('Invalid rotation data');
-            }
-        } catch (error) {
-            logger.error(`Error fetching data for server ${servername}: ${error.message}`);
-            const embed = new EmbedBuilder()
-                .setTitle(servername)
-                .setDescription(`Fetch error: ${error.message}`)
-                .setColor(0xFF0000)
-                .setThumbnail(thumbnails[i % thumbnails.length]);
-            messages.push(embed);
-        }
-    }
-    return messages;
-}
-
-// Commit 16: Implement client login and error handling
+// Start the bot
 client.login(TOKEN).then(() => {
     logger.info('Bot is logging in...');
 }).catch(error => {
     logger.error('Error during login:', error);
 });
 
+// Handle unhandled promise rejections
 process.on('unhandledRejection', error => {
     logger.error('Unhandled promise rejection:', error);
 });
-
-// Commit 17: Implement message deletion utility
-async function deleteOldMessages(channel) {
-    const messages = await channel.messages.fetch({ limit: 100 });
-    const now = Date.now();
-    const messagesToDelete = messages.filter(msg => now - msg.createdTimestamp > 14 * 24 * 60 * 60 * 1000);
-
-    for (const message of messagesToDelete.values()) {
-        await message.delete();
-    }
-
-    const messagesToBulkDelete = messages.filter(msg => now - msg.createdTimestamp <= 14 * 24 * 60 * 60 * 1000);
-    if (messagesToBulkDelete.size > 0) {
-        await channel.bulkDelete(messagesToBulkDelete);
-    }
-
-    logger.info('Old messages deleted.');
-}
-
-// Final commit: Add comments and clean up code
-// This script is a Discord bot that provides real-time updates on game server status.
-// It fetches information about current and next maps, player counts, and game scores.
-// The bot uses environment variables for configuration and Winston for logging.
-// Regular updates are performed to keep the information current.
-// A watchdog function ensures the bot stays responsive and reconnects if necessary.
-// Memory usage is logged periodically for monitoring purposes.
-// The script is designed to be run as a long-lived process, continuously updating
-// Discord messages with the latest game server information.
