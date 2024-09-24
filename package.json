@@ -2,15 +2,19 @@
   "name": "hll-gamestatus-maprotation",
   "version": "1.0.0",
   "description": "A Discord bot for displaying Hell Let Loose server status",
-  "main": "main.mjs",
+  "main": "main.js",
+  "type": "module",
   "scripts": {
     "start": "node main.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "discord",
     "bot",
     "hell-let-loose",
-    "server-status"
+    "hll",
+    "player-count",
+    "rcon"
   ],
   "author": "s1lence-aut",
   "license": "MIT",
@@ -22,5 +26,5 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  },
+  }
 }
